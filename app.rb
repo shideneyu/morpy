@@ -28,9 +28,9 @@ def all_equal?(*elements)
   elements.all? { |x| x == elements.first }
 end
 
-def define
+def define(rows)
   # params[:move] => [0, 0]
-  @symbol = if @rows.flatten.compact.select {|str| str == 'X' }.count > @rows.flatten.compact.select {|str| str == 'O' }.count
+  @symbol = if rows.flatten.compact.select {|str| str == 'X' }.count > rows.flatten.compact.select {|str| str == 'O' }.count
     'O'
   else
     'X'
@@ -61,19 +61,8 @@ delete '/game' do
 end
 
 get '/game/moves' do
-   @rows = [
-    [nil, nil, nil],
-    [nil, nil, nil],
-    [nil, nil, nil]
-  ]
-
-  if params[:move]
-    params[:move].each_slice(2).to_a.each do |j, k|
-      define
-      @rows[j.to_i][k.to_i] = @symbol
-    end
-  end
-
+  @rows = Game.first.squares
+  define(@rows)
   slim :'index.html'
 end
 
@@ -81,8 +70,9 @@ post '/game/moves' do
   # params[:coordinate]
   if params[:square]
     a = Game.first
-    a.squares[params[:square][0].to_i][params[:square][1].to_i] = "X"
+    a.squares[eval(params[:square])[0].to_i][eval(params[:square])[1].to_i] = define(a.squares)
     a.save
+    puts "TOKEN"
   end
 end
 

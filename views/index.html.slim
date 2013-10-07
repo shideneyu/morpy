@@ -11,38 +11,34 @@ html
         div class="span12"
           h1 class="text-center" Morpy
         div class="span12"
-          table class = "table table-condensed table-bordered"
+          table class="table table-condensed table-bordered" id="board"
             - @rows.each_with_index do |row, yi|
-              tr class="#{'striped'}"
+              tr
                 - row.each_with_index do |square, xi|
-                  - # Checking if this the game is won
-                  td class="span4 #{'striped' if ((xi.even? && !yi.even?) || (!xi.even? && yi.even?))} #{'empty' if square.nil?}"
-                      - unless square.nil?
-                        - square == "X" ? color = "red" : color = "green"
-                        b
-                          font color="#{color}"
-                            = square
+                  td class="span4"
+                    b
+                      - if square.nil?
+                        a href="moves" id="[#{yi},#{xi}]" class="click"
+                          = @symbol
                       - else
-                        - square ||= define
-                        - link = ""
-                        - for i in params[:move] do link << "move[]=#{i}&" end if params[:move]
-                        - link << "move[]=#{xi}&move[]=#{yi}"
-                        a href = "moves" onClick="send(#{xi}, #{yi});"
+                        p class="clicked"
                           = square
-                        - square = nil
+
+
     script type="text/javascript"
       |
-        function send(xi,yi) {
-          info = [];
-          info[0] = xi;
-          info[1] = yi;
-          $.ajax({
+        $('.click').click(function() {
+          send(this.id);
+        });
+        function send(info) {
+            $.ajax({
             type: 'POST',
             url: 'moves',
             dataType: 'text',
             async: false,
             data: {square:info},
             success: function(token) {
+              alert(token);
               if ( token == "X") {
 
               }
