@@ -1,0 +1,30 @@
+.table a { color: white;
+  display:block;
+  width:100%;
+  height:100%;
+  text-decoration:none;
+}
+
+tr.striped a {color:#dddddd;}
+td.striped a {color:white;}
+
+tr.striped a:hover {color: yellow;}
+tr.striped a:hover {color: yellow;}
+
+tr.striped { 
+  background-color: #dddddd;   /* or whatever color you want */
+}
+
+td.striped {
+  background-color: white; 
+}
+
+.table td {
+  text-align: center; 
+  vertical-align:middle;
+}
+
+td.empty:hover  {
+  background-color: purple;   /* or whatever color you want */
+}
+

@@ -1,32 +1,57 @@
 html
   head
+    link href="css/bootstrap.css" rel="stylesheet" media="screen"
     link href="css/bootstrap.min.css" rel="stylesheet" media="screen"
-    script src="js/jquery.js"></script>
-    script src="js/bootstrap.min.js"></script>
+    link href="css/style.css" rel="stylesheet" media="screen"
+    script src="js/jquery-1.5.1.min.js"
+    script src="js/bootstrap.min.js"
   body
     div class="container"
       div class="row"
         div class="span12"
-          h1 Morpy
+          h1 class="text-center" Morpy
         div class="span12"
-          - jrow = 0
-          - ksquare = 0
-          table class = "table table-striped table-hover table-condensed"
-            - @rows.each do |row|
-              tr
-                - row.each do |square|
-                  - define
-                  - square.nil? ? color = "white" : color = "red"
-                  - square ||= @symbol
-                  td
-                    font color="#{color}"
-                      - if color == "red"
-                        = square
+          table class = "table table-condensed table-bordered"
+            - @rows.each_with_index do |row, yi|
+              tr class="#{'striped'}"
+                - row.each_with_index do |square, xi|
+                  - # Checking if this the game is won
+                  td class="span4 #{'striped' if ((xi.even? && !yi.even?) || (!xi.even? && yi.even?))} #{'empty' if square.nil?}"
+                      - unless square.nil?
+                        - square == "X" ? color = "red" : color = "green"
+                        b
+                          font color="#{color}"
+                            = square
                       - else
+                        - square ||= define
                         - link = ""
-                        - for i in params[:move] do puts link << "move[]=#{i}&" end
-                        - link << "move[]=#{jrow}&move[]=#{ksquare}"
-                        a href = "move?#{link}"
+                        - for i in params[:move] do link << "move[]=#{i}&" end if params[:move]
+                        - link << "move[]=#{xi}&move[]=#{yi}"
+                        a href = "moves" onClick="send(#{xi}, #{yi});"
                           = square
-                - ksquare =+ 1 
-              - jrow =+ 1
+                        - square = nil
+    script type="text/javascript"
+      |
+        function send(xi,yi) {
+          info = [];
+          info[0] = xi;
+          info[1] = yi;
+          $.ajax({
+            type: 'POST',
+            url: 'moves',
+            dataType: 'text',
+            async: false,
+            data: {square:info},
+            success: function(token) {
+              if ( token == "X") {
+
+              }
+              else {
+              
+              }
+            },
+            error: function(xhr, status, error) {
+              alert(XMLHttpRequest, textStatus, errorThrown);
+            }
+          });
+        }
