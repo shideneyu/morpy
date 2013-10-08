@@ -1,22 +1,10 @@
-.table a { color: white;
+.table a {
   display:block;
   width:100%;
   height:100%;
   text-decoration:none;
-}
+  color: rgba(0, 0, 0, 0);
 
-tr.striped a {color:#dddddd;}
-td.striped a {color:white;}
-
-tr.striped a:hover {color: yellow;}
-tr.striped a:hover {color: yellow;}
-
-tr.striped { 
-  background-color: #dddddd;   /* or whatever color you want */
-}
-
-td.striped {
-  background-color: white; 
 }
 
 .table td {
@@ -24,11 +12,10 @@ td.striped {
   vertical-align:middle;
 }
 
-td.empty:hover  {
+.click:hover  {
   background-color: purple;   /* or whatever color you want */
+  color: white;
 }
-
-
 
 #board tr:nth-child(odd) td:nth-child(even),
 #board tr:nth-child(even) td:nth-child(odd){

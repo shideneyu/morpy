@@ -3,7 +3,7 @@ html
     link href="css/bootstrap.css" rel="stylesheet" media="screen"
     link href="css/bootstrap.min.css" rel="stylesheet" media="screen"
     link href="css/style.css" rel="stylesheet" media="screen"
-    script src="js/jquery-1.5.1.min.js"
+    script src="js/jquery-1.10.2.js"
     script src="js/bootstrap.min.js"
   body
     div class="container"
@@ -12,42 +12,44 @@ html
           h1 class="text-center" Morpy
         div class="span12"
           table class="table table-condensed table-bordered" id="board"
-            - @rows.each_with_index do |row, yi|
+            - @rows.each_with_index do |row, xi|
               tr
-                - row.each_with_index do |square, xi|
+                - row.each_with_index do |square, yi|
                   td class="span4"
-                    b
+                    p id="p.#{xi}.#{yi}" class="clicked"
                       - if square.nil?
-                        a href="moves" id="[#{yi},#{xi}]" class="click"
+                        a href="#" class='click'
                           = @symbol
                       - else
-                        p class="clicked"
                           = square
 
 
     script type="text/javascript"
       |
-        $('.click').click(function() {
-          send(this.id);
-        });
+        $(function() {
+          $('.span4').on('click', '.click', (function(e) {
+            e.preventDefault();
+            send($(this).parent().attr("id"));
+          }));
+
+
         function send(info) {
+            square = info.split(".");
+            square.splice($.inArray("p", info),1);
             $.ajax({
             type: 'POST',
             url: 'moves',
             dataType: 'text',
-            async: false,
-            data: {square:info},
+            data: {square:square},
             success: function(token) {
-              alert(token);
-              if ( token == "X") {
-
-              }
-              else {
-              
-              }
+              info = info.replace(/\./g,"\\."); // unescaping the variable for jquery
+              $('#' + info).html($('#' + info + ' a').html());
+              $('.click').html(token);
             },
             error: function(xhr, status, error) {
               alert(XMLHttpRequest, textStatus, errorThrown);
             }
           });
         }
+
+        });

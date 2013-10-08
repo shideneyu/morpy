@@ -70,9 +70,9 @@ post '/game/moves' do
   # params[:coordinate]
   if params[:square]
     a = Game.first
-    a.squares[eval(params[:square])[0].to_i][eval(params[:square])[1].to_i] = define(a.squares)
+    a.squares[params[:square][0].to_i][params[:square][1].to_i] = define(a.squares)
     a.save
-    puts "TOKEN"
+    define(a.squares)
   end
 end
 
