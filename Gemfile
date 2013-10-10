@@ -6,6 +6,8 @@ gem "activerecord"
 gem "sinatra-activerecord"
 gem "sinatra-contrib"
 gem "json"
+gem "slim"
+gem "debugger"
 
 group :development do
   gem "shotgun"

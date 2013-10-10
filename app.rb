@@ -7,8 +7,6 @@ require "sinatra/activerecord"
 
 require "sinatra/json"
 require "json"
- 
-set :database, "sqlite3:///morpy.db"
 
 class Game < ActiveRecord::Base
   has_many :moves
