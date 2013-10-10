@@ -36,11 +36,6 @@ def define(rows)
 end
 
 get '/game' do
-  @game = Game.first
-end
-
-post '/game' do
-  # params[:squares] = (0..8).v
   unless @game = Game.first
     squares = if params[:squares].nil? || params[:squares].class != Array
       [[nil, nil, nil], [nil, nil, nil], [nil, nil, nil]]
@@ -51,6 +46,11 @@ post '/game' do
     @game = Game.new({squares: squares})
     @game.save
   end
+end
+
+post '/game' do
+  # params[:squares] = (0..8).v
+  
 end
 
 delete '/game' do
