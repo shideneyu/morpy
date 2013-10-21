@@ -22,6 +22,12 @@ html
                           = @symbol
                       - else
                           = square
+          div class="span6" 
+            a href="#" class='delete'
+              ' "Click here to delete the game"
+          div class="span6"
+            a href="#" class='create'
+              ' "Click here to create a new game"
 
 
     script type="text/javascript"
@@ -32,24 +38,59 @@ html
             send($(this).parent().attr("id"));
           }));
 
+          $('.span6').on('click', '.delete', (function(r) {
+            r.preventDefault();
+            destroy();
+          }));
 
-        function send(info) {
-            square = info.split(".");
-            square.splice($.inArray("p", info),1);
-            $.ajax({
-            type: 'POST',
-            url: 'moves',
-            dataType: 'text',
-            data: {square:square},
-            success: function(token) {
-              info = info.replace(/\./g,"\\."); // unescaping the variable for jquery
-              $('#' + info).html($('#' + info + ' a').html());
-              $('.click').html(token);
-            },
-            error: function(xhr, status, error) {
-              alert(XMLHttpRequest, textStatus, errorThrown);
-            }
-          });
-        }
+          $('.span6').on('click', '.create', (function(s) {
+            s.preventDefault();
+            create();
+          }));
 
+
+
+          function send(info) {
+              square = info.split(".");
+              square.splice($.inArray("p", info),1);
+              $.ajax({
+              type: 'POST',
+              url: 'moves',
+              dataType: 'text',
+              data: {square:square},
+              success: function(token) {
+                info = info.replace(/\./g,"\\."); // unescaping the variable for jquery
+                $('#' + info).html($('#' + info + ' a').html());
+                $('.click').html(token);
+              },
+              error: function(xhr, status, error) {
+                alert(XMLHttpRequest, textStatus, errorThrown);
+              }
+            });
+          }
+          function destroy() {
+              $.ajax({
+              type: 'delete',
+              url: '../game',
+              success: function(token) {
+                alert('deleted successfuly');
+              },
+              error: function(XMLHttpRequest, textStatus, errorThrown) {
+                alert(XMLHttpRequest, textStatus, errorThrown);
+              }
+            });
+          }
+
+          function create() {
+              $.ajax({
+              type: 'put',
+              url: '../game',
+              success: function(token) {
+                alert('created successfuly');
+              },
+              error: function(XMLHttpRequest, textStatus, errorThrown) {
+                alert(XMLHttpRequest, textStatus, errorThrown);
+              }
+            });
+          }
         });

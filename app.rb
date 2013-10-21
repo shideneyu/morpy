@@ -8,6 +8,15 @@ require "sinatra/activerecord"
 require "sinatra/json"
 require "json"
 
+configure :development do
+  #set :db, File.join("sqlite3://",settings.root, "development.db"
+  set :database, "sqlite3:///morpy.db"
+end
+
+configure :test do
+  set :database, "sqlite3:///morpy.db"
+end
+
 class Game < ActiveRecord::Base
   has_many :moves
 
@@ -35,17 +44,16 @@ def define(rows)
   end
 end
 
-get '/game' do
-  unless @game = Game.first
-    squares = if params[:squares].nil? || params[:squares].class != Array
-      [[nil, nil, nil], [nil, nil, nil], [nil, nil, nil]]
-    else
-      params[:squares]
-    end
-
-    @game = Game.new({squares: squares})
-    @game.save
+delete '/game' do
+  if @game = Game.first
+    @game.destroy
   end
+end
+
+put '/game' do
+  squares = [[nil, nil, nil], [nil, nil, nil], [nil, nil, nil]]
+  @game = Game.new({squares: squares})
+  @game.save
 end
 
 post '/game' do
@@ -73,23 +81,3 @@ post '/game/moves' do
     define(a.squares)
   end
 end
-
-
-
-
-
-
-
-get "/" do
-  @rows = [
-    [nil, nil, nil],
-    [nil, nil, nil],
-    [nil, nil, nil]
-  ]
-  slim :'index.html'
-end
-
-get '/move' do
- 
-end
-

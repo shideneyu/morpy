@@ -6,6 +6,9 @@
 
 **Morpy** is running using Sinatra. Games are played asynchronously using Ajax.
 
+## API
+
+**get '/game/'**
 
 
 
