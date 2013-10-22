@@ -9,9 +9,10 @@ module ChatDemo
     KEEPALIVE_TIME = 15 # in seconds
     CHANNEL        = "chat-demo"
 
+    @@clients = []
+
     def initialize(app)
       @app     = app
-      @@clients = []
       uri = URI.parse(ENV["REDISCLOUD_URL"])
       @redis = Redis.new(host: uri.host, port: uri.port, password: uri.password)
       Thread.new do
@@ -22,6 +23,10 @@ module ChatDemo
           end
         end
       end
+    end
+
+    def self.clients
+      @@clients
     end
 
     def call(env)

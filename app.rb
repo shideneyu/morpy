@@ -76,6 +76,9 @@ get '/game/moves' do
 end
 
 post '/game/moves' do
+  clients = ChatDemo::ChatBackend::clients
+  clients.each {|ws| ws.send('test') }
+
   # params[:coordinate]
   if params[:square]
     a = Game.first
