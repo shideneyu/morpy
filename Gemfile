@@ -7,6 +7,10 @@ gem "sinatra-contrib"
 gem "json"
 gem "slim"
 
+gem "faye-websocket"
+gem "puma"
+gem "redis"
+
 group :production do
   gem "pg"
 end

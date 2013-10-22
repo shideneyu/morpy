@@ -11,14 +11,14 @@ module ChatDemo
 
     def initialize(app)
       @app     = app
-      @clients = []
+      @@clients = []
       uri = URI.parse(ENV["REDISCLOUD_URL"])
       @redis = Redis.new(host: uri.host, port: uri.port, password: uri.password)
       Thread.new do
         redis_sub = Redis.new(host: uri.host, port: uri.port, password: uri.password)
         redis_sub.subscribe(CHANNEL) do |on|
           on.message do |channel, msg|
-            @clients.each {|ws| ws.send(msg) }
+            @@clients.each {|ws| ws.send(msg) }
           end
         end
       end
@@ -29,7 +29,7 @@ module ChatDemo
         ws = Faye::WebSocket.new(env, nil, {ping: KEEPALIVE_TIME })
         ws.on :open do |event|
           p [:open, ws.object_id]
-          @clients << ws
+          @@clients << ws
         end
 
         ws.on :message do |event|
@@ -39,7 +39,7 @@ module ChatDemo
 
         ws.on :close do |event|
           p [:close, ws.object_id, event.code, event.reason]
-          @clients.delete(ws)
+          @@clients.delete(ws)
           ws = nil
         end
 

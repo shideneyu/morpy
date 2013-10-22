@@ -8,6 +8,9 @@ require "sinatra/activerecord"
 require "sinatra/json"
 require "json"
 
+require "./middlewares/chat_backend.rb"
+use ChatDemo::ChatBackend
+
 configure :development do
   #set :db, File.join("sqlite3://",settings.root, "development.db"
   set :database, "sqlite3:///morpy.db"
@@ -78,6 +81,14 @@ post '/game/moves' do
     a = Game.first
     a.squares[params[:square][0].to_i][params[:square][1].to_i] = define(a.squares)
     a.save
+    # sending alert to clients
+
     define(a.squares)
   end
+end
+
+get "/assets/js/application.js" do
+  content_type :js
+  @scheme = ENV['RACK_ENV'] == "production" ? "wss://" : "ws://"
+  erb :"application.js"
 end
