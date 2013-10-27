@@ -77,15 +77,13 @@ end
 
 post '/game/moves' do
   clients = ChatDemo::ChatBackend::clients
-  clients.each {|ws| ws.send('test') }
-
   # params[:coordinate]
   if params[:square]
     a = Game.first
     a.squares[params[:square][0].to_i][params[:square][1].to_i] = define(a.squares)
     a.save
     # sending alert to clients
-
+    clients.each {|ws| ws.send("#{[params[:square][0].to_i,params[:square][1].to_i,define(a.squares)]}")}
     define(a.squares)
   end
 end

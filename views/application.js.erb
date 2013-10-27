@@ -2,8 +2,9 @@ var scheme   = "<%= @scheme %>";
 var uri      = scheme + window.document.location.host + "/";
 var ws       = new WebSocket(uri);
 ws.onmessage = function(message) {
-  var data = JSON.parse(message.data);
-  console.log(message);
+  info = "p\\." + eval(message.data)[0] + "\\." + eval(message.data)[1];
+  $('#' + info).html($('#' + info + ' a').html());
+  $('.click').html(eval(message.data)[2]);
   /*
   ("#chat-text").append("<div class='panel panel-default'><div class='panel-heading'>" + data.handle + "</div><div class='panel-body'>" + data.text + "</div></div>");
   $("#chat-text").stop().animate({
